@@ -1,0 +1,143 @@
+/*	Global reset   */
+
+body, html{
+	height: 100%;
+}
+
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+
+}
+
+/*	App flex container	*/
+
+#container{
+	height:100%;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	font: bold 15px sans-serif;
+	overflow: hidden;
+}
+
+/*---------------------------
+	Cover Art Section
+----------------------------*/
+
+#main-canvas{
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex: 1 auto;
+	flex: 1 auto;
+	position: relative;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+#canvas-big{
+	-webkit-flex: 1;
+	flex: 1;
+	background-color: #26292C;
+	background-size: cover;
+	-webkit-filter: blur(10px);
+	-webkit-filter: brightness(50%);
+	margin: -12px ;
+}
+
+#canvas-small{
+	position: absolute;
+	width: 50vw;
+	top: 10vh;
+	left: 25vh;
+	right: 25vh;
+	margin: auto auto auto auto;
+	border-radius: 50px;
+}
+
+
+/*---------------------------
+	Player Control Bar
+----------------------------*/
+
+#control-bar{
+	display: -webkit-flex;
+	display: flex;
+	color: #b0b0b0;
+	text-align: left;
+
+	position: relative;
+	z-index: 10;
+}
+
+#container.disabled #control-bar{
+	pointer-events: none;
+}
+
+.player-control{
+	-webkit-flex: 2;
+	flex:2;
+	display: -webkit-flex;
+	display: flex;
+
+}
+
+.player-control div{
+	-webkit-flex: 1;
+	flex: 1;
+	background-color: #fff;
+	text-align: center;
+	line-height: 60px;
+	height: 100%;
+	cursor: pointer;
+	background-color: #202020;
+}
+
+
+#front-button.disabled{
+	pointer-events: none;
+	color: #404040;
+}
+
+#rear-button.disabled{
+	pointer-events: none;
+	color: #404040;
+}
+
+#frame-button.disabled{
+	pointer-events: none;
+	color: #404040;
+}
+
+#video-button.disabled{
+	pointer-events: none;
+	color: #404040;
+}
+
+#container.disabled .player-control div{
+	color: #404040;
+}
+
+
+/*---------------------------
+		Media queries
+---------------------------*/
+
+@media (max-width: 1200px){
+
+	#control-bar{
+		-webkit-flex-flow: column wrap;
+		flex-flow: column wrap;
+	}
+
+	.player-control{
+		-webkit-order: 2;
+		order: 2;
+		border-radius: 25px;
+	}
+}
