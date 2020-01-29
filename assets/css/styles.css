@@ -26,6 +26,9 @@ body, html{
 	overflow: hidden;
 }
 
+#video{
+		display:none;
+	}
 /*---------------------------
 	Cover Art Section
 ----------------------------*/
@@ -45,19 +48,25 @@ body, html{
 	flex: 1;
 	background-color: #26292C;
 	background-size: cover;
-	-webkit-filter: blur(10px);
-	-webkit-filter: brightness(50%);
 	margin: -12px ;
 }
 
 #canvas-small{
-	position: absolute;
-	width: 50vw;
-	top: 10vh;
-	left: 25vh;
-	right: 25vh;
-	margin: auto auto auto auto;
+	padding: 0;
+    margin: auto;
+    display: block;
+    width: 800px;
+    height: 600px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+	
+	
 	border-radius: 50px;
+	background-color: #202020;
+
 }
 
 
@@ -140,4 +149,6 @@ body, html{
 		order: 2;
 		border-radius: 25px;
 	}
+	
+	
 }
