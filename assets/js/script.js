@@ -1,4 +1,4 @@
-var video = document.getElementById('video');
+const video = document.getElementById('video');
 var canvas = document.getElementById('canvas-small');
 var context = canvas.getContext('2d');
 
@@ -84,33 +84,93 @@ navigator.mediaDevices.getUserMedia({video: true}).then(mediaStream => {
 
 // Pressing the 'frame' button
 // Takes a snapshot of the current view
-$('#frame-button').on('click', function () {
+/*$('#frame-button').on('click', function () {
   console.log("Frame snapshot");
-  onTakePhotoButtonClick();
+  onTakePhotoButtonClick().then(downloadImage);
 });
+*/
+
+const btnPhoto = document.querySelector("#frame-button");
+btnPhoto.onclick = e => {
+    takePhoto().then(downloadImage);
+  };
 
 // Pressing the 'video' button.
 // Creates a recording of the current view
-$('#video-button').on('click', function () {
-  console.log("Video recording");
-});
 
-function onTakePhotoButtonClick() {
-  imageCapture.takePhoto()
-  .then(blob => createImageBitmap(blob))
-  .then(function(blob){
-    downloadImage(blob);
-    //const canvas = document.querySelector('#takePhotoCanvas');
-    //drawCanvas(canvas, imageBitmap);
-  })
-  .catch(error => console.log(error));
+const btn = document.querySelector('#video-button');
+btn.onclick = startRecording;
+
+/*$('#video-button').on('click', function () {
+  console.log("Video recording");
+  onMakeRecordingButtonClick(this);
+});*/
+
+function takePhoto() {
+  btnPhoto.style.background = "white";
+  const canvas = document.createElement('canvas'); // create a canvas
+  const ctx = canvas.getContext('2d'); // get its context
+  canvas.width = video.videoWidth; // set its size to the one of the video
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0,0); // the video
+  return new Promise((res, rej)=>{
+    canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+  });
 }
 
+function startRecording(){
+  // switch button's behavior
+  //const btn = this;
+  console.log("startRecording");
+  btn.style.background = 'red';
+  btn.onclick = stopRecording;
+
+  const chunks = []; // here we will save all video data
+  console.log(video);
+  var options = {
+        videoBitsPerSecond: 1000000
+  };
+  const rec = new MediaRecorder(video.srcObject,options);
+  console.log(rec);
+  // this event contains our data
+  rec.ondataavailable = e => chunks.push(e.data);
+  // when done, concatenate our chunks in a single Blob
+  rec.onstop = e => downloadVideo(new Blob(chunks));
+  rec.start();
+  const recordTimeout = setTimeout(recLimit,120000);
+
+  function stopRecording(){
+    console.log("stopRecording");
+    rec.stop();
+    // switch button's behavior
+    btn.style.background="#202020";
+    btn.onclick = startRecording;
+    clearTimeout(recordTimeout);
+
+  }
+
+  function recLimit(){
+    stopRecording();
+  }
+}
+
+
+
 function downloadImage(blob){
-  // uses the <a download> to download a Blob
   let a = document.createElement('a');
-  a.href.srcObject = (blob);
-  a.download = 'image.png';
+  a.href = URL.createObjectURL(blob);
+  a.download = 'screenshot.jpg';
   document.body.appendChild(a);
   a.click();
+  btnPhoto.style.background = "";
+}
+
+function downloadVideo(blob){
+  // uses the <a download> to download a Blob
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'recorded.webm';
+  document.body.appendChild(a);
+  a.click();
+
 }
